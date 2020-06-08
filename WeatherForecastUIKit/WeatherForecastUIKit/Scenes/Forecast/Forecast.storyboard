@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Forecast View Controller-->
+        <scene sceneID="FLR-un-CdF">
+            <objects>
+                <viewController storyboardIdentifier="ForecastViewController" id="cui-hW-Z7K" customClass="ForecastViewController" customModule="WeatherForecastUIKit" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pka-4c-e7K">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oAs-k9-bJq">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="cui-hW-Z7K" id="ygo-mj-uPS"/>
+                                </connections>
+                            </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="z25-oN-tgv">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="oAs-k9-bJq" firstAttribute="leading" secondItem="5Ht-UF-uX3" secondAttribute="leading" id="A0I-rc-IEf"/>
+                            <constraint firstItem="z25-oN-tgv" firstAttribute="centerY" secondItem="5Ht-UF-uX3" secondAttribute="centerY" id="B3n-wY-LB5"/>
+                            <constraint firstItem="z25-oN-tgv" firstAttribute="centerX" secondItem="5Ht-UF-uX3" secondAttribute="centerX" id="PhU-ve-Wv6"/>
+                            <constraint firstItem="oAs-k9-bJq" firstAttribute="trailing" secondItem="5Ht-UF-uX3" secondAttribute="trailing" id="fHk-Oc-CTy"/>
+                            <constraint firstItem="oAs-k9-bJq" firstAttribute="bottom" secondItem="5Ht-UF-uX3" secondAttribute="bottom" id="mMp-ha-ywC"/>
+                            <constraint firstItem="oAs-k9-bJq" firstAttribute="top" secondItem="5Ht-UF-uX3" secondAttribute="top" id="nvs-Uu-7BH"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="5Ht-UF-uX3"/>
+                    </view>
+                    <connections>
+                        <outlet property="spinner" destination="z25-oN-tgv" id="eac-N0-8RN"/>
+                        <outlet property="tableView" destination="oAs-k9-bJq" id="lBl-L8-hBj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="963-Yi-dPd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="52" y="138.98050974512745"/>
+        </scene>
+    </scenes>
+</document>
