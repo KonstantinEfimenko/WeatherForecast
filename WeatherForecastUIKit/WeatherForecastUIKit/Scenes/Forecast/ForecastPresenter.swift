@@ -25,6 +25,7 @@ protocol ForecastViewProtocol: AnyObject {
     func set(title: String?)
     func reloadTableView()
     func showSpinner(_ show: Bool)
+    func showError(with message: String)
 }
 
 class ForecastPresenter: ForecastPresenterProtocol {
@@ -51,8 +52,13 @@ class ForecastPresenter: ForecastPresenterProtocol {
     func viewDidLoad() {
         managedView?.set(title: cityName)
         managedView?.showSpinner(true)
-        storageManager.getForecast(by: cityName) { [weak self] list in
-            self?.dayForecasts = list
+        storageManager.getForecast(by: cityName ?? "") { [weak self] result in
+            switch result {
+            case .success(let list):
+                self?.dayForecasts = list                
+            case .failure(let error):
+                self?.managedView?.showError(with: error.localizedDescription)
+            }
             self?.managedView?.showSpinner(false)
         }
     }

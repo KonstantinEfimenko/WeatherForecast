@@ -53,6 +53,12 @@ extension ForecastViewController: ForecastViewProtocol {
             spinner.stopAnimating()
         }
     }
+    
+    func showError(with message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
+    }
 }
 
 extension ForecastViewController: UITableViewDataSource {

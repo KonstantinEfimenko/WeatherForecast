@@ -11,7 +11,7 @@ import DataModel
 
 public protocol StorageManagerProtocol {
     func getCities(completion: (([City]) -> Void)?)
-    func getForecast(by city: String?, completion: (([DayForecast]) -> Void)?)
+    func getForecast(by city: String, completion: ((Result<[DayForecast],Error>) -> Void)?)
 }
 
 public class StorageManager: StorageManagerProtocol {
@@ -23,9 +23,9 @@ public class StorageManager: StorageManagerProtocol {
         completion?(stubData)
     }
     
-    public func getForecast(by city: String?, completion: (([DayForecast]) -> Void)?) {
-        ForecastByCityConnection(successHandler: { list in
-            completion?(list)
-        }, failureHandler: nil)
+    public func getForecast(by city: String, completion: ((Result<[DayForecast],Error>) -> Void)?) {
+        ForecastByCityConnection(with: city) { result in
+            completion?(result)
+        }
     }
 }

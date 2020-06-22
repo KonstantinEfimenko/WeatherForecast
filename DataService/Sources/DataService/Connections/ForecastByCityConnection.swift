@@ -15,41 +15,38 @@ struct HTTPBinResponse: Decodable {
     let list: [ForecastData]
 }
 
+enum MyError: Error {
+    case networkError
+    case generalError
+}
+
 public final class ForecastByCityConnection {
     
     private let daysToShow = 4
     
-    init(successHandler: ((_ cards: [DayForecast]) -> Void)?,
-         failureHandler: ((_ error: String) -> Void)?) {
-        let URLString = "https://api.openweathermap.org/data/2.5/forecast?q=Kyiv,ua&APPID=26be89ee1af748edc48498ea7ba3c5c8"
+    init(with city: String, completion: ((Result<[DayForecast], Error>) -> Void)?) {
+        let URLString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&APPID=26be89ee1af748edc48498ea7ba3c5c8"
         
         AF.request(URLString).responseJSON { response in
             switch response.result {
             case .success:
-                if let jsonData = response.data {
-                    self.onGetting(data: jsonData, successHandler: successHandler, failureHandler: failureHandler)
+            
+                guard let jsonData = response.data else {
+                    completion?(Result.failure(MyError.generalError))
+                    return
                 }
+                let result = self.onGetting(data: jsonData)
+                completion?(result)
+                
             case .failure(let error):
-                failureHandler?(error.localizedDescription)
-                if let jsonData = self.offlineData() { // To avoid security limitation in my mac
-                    self.onGetting(data: jsonData, successHandler: successHandler, failureHandler: failureHandler)
-                }
+                completion?(Result.failure(error))
             }
         }
     }
     
-    private func onGetting(data: Data,
-                           successHandler: ((_ cards: [DayForecast]) -> Void)?,
-                           failureHandler: ((_ error: String) -> Void)?) {
+    private func onGetting(data: Data) -> Result<[DayForecast],Error> {
         let jsonDecoder = JSONDecoder()
-        do {
-            let jsonResponse = try jsonDecoder.decode(HTTPBinResponse.self, from: data)
-            
-            let list = prepareData(jsonResponse.list)
-            successHandler?(list)
-        }catch let error{
-            failureHandler?(error.localizedDescription)
-        }
+        return Result { try prepareData(jsonDecoder.decode(HTTPBinResponse.self, from: data).list) }
     }
     
     private func prepareData(_ list: [ForecastData]) -> [DayForecast] {
@@ -75,11 +72,12 @@ public final class ForecastByCityConnection {
         return result
     }
     
-    private func offlineData() -> Data? {
+    // Use it in case of security restrictions in network
+    private func offlineData() -> Result<Data?, Error> {
         if let path = Bundle.current.path(forResource: "OfflineData", ofType: "json") {
-            return try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            return Result { try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe) }
         }
 
-        return nil
+        return Result.failure(MyError.generalError)
     }
 }
